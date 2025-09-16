@@ -8,6 +8,14 @@ import {
 } from "./form";
 import { Input } from "./input";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
+
 type options = {
   label: string;
   value: string;
@@ -42,12 +50,27 @@ const FormInputField = ({
             <FormLabel>{label}</FormLabel>
           )}
           <FormControl>
-            <Input
-              type={type}
-              placeholder={placeholder}
-              {...props}
-              {...field}
-            />
+            {type === "select" ? (
+              <Select>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={placeholder} />
+                </SelectTrigger>
+                <SelectContent>
+                  {options?.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <Input
+                type={type}
+                placeholder={placeholder}
+                {...props}
+                {...field}
+              />
+            )}
           </FormControl>
           <FormMessage />
         </FormItem>
