@@ -1,24 +1,34 @@
 import z from "zod";
-import useCreateUser from "../hooks/useCreateUser";
-import { createsUserSchema } from "../types/validation";
+import { updateUserSchema } from "../types/validation";
 import FormInputField from "@/components/ui/form-field";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import useUpdateUser from "../hooks/useUpdateUser";
 
-const FormCreateUser = () => {
-  const { formRegister, register } = useCreateUser();
+type FormUpdateUserProps = {
+  onCancel: (result: boolean) => void;
+  onUpdate: ({ result }: { result: boolean }) => void;
+};
+const FormUpdateUser = ({ onCancel, onUpdate }: FormUpdateUserProps) => {
+  const { formUpdate, update } = useUpdateUser();
 
-  const onSubmit = (values: z.infer<typeof createsUserSchema>) => {
+  const onSubmit = (values: z.infer<typeof updateUserSchema>) => {
     console.log(values);
+    onUpdate({ result: true });
   };
+
+  const handleCancel = () => {
+    onCancel(true);
+  };
+
   return (
-    <Form {...formRegister}>
-      <form onSubmit={formRegister.handleSubmit(onSubmit)}>
+    <Form {...formUpdate}>
+      <form onSubmit={formUpdate.handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col md:flex-row gap-3 w-full">
             <div className="flex-1">
               <FormInputField
-                control={formRegister.control}
+                control={formUpdate.control}
                 name="name"
                 label="Nombres"
                 type="text"
@@ -27,7 +37,7 @@ const FormCreateUser = () => {
             </div>
             <div className="flex-1">
               <FormInputField
-                control={formRegister.control}
+                control={formUpdate.control}
                 name="lastName"
                 label="Apellidos"
                 type="text"
@@ -37,7 +47,7 @@ const FormCreateUser = () => {
           </div>
           <div className="grid gap-3">
             <FormInputField
-              control={formRegister.control}
+              control={formUpdate.control}
               name="email"
               label="Correo electrónico"
               type="email"
@@ -46,25 +56,7 @@ const FormCreateUser = () => {
           </div>
           <div className="grid gap-3">
             <FormInputField
-              control={formRegister.control}
-              name="password"
-              label="Contraseña"
-              type="password"
-              placeholder="**********"
-            />
-          </div>
-          <div className="grid gap-3">
-            <FormInputField
-              control={formRegister.control}
-              name="confirmPassword"
-              label="Confirmar contraseña"
-              type="password"
-              placeholder="**********"
-            />
-          </div>
-          <div className="grid gap-3">
-            <FormInputField
-              control={formRegister.control}
+              control={formUpdate.control}
               name="role_id"
               label="Rol"
               type="select"
@@ -75,9 +67,17 @@ const FormCreateUser = () => {
               ]}
             />
           </div>
-          <div className="grid gap-3">
-            <Button size={"lg"} type="submit">
-              Crear usuario
+          <div className="flex gap-3 justify-end">
+            <Button
+              type="button"
+              variant={"secondary"}
+              className="cursor-pointer"
+              onClick={handleCancel}
+            >
+              Cancelar
+            </Button>
+            <Button size={"lg"} type="submit" className="cursor-pointer">
+              Actualizar
             </Button>
           </div>
         </div>
@@ -86,4 +86,4 @@ const FormCreateUser = () => {
   );
 };
 
-export default FormCreateUser;
+export default FormUpdateUser;

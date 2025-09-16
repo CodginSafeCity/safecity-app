@@ -8,14 +8,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { UserPlus } from "lucide-react";
-import FormCreateUser from "./formCreateUser";
+import FormCreateUser from "./form-create-user";
+import { useState } from "react";
 
 const CreateUserModal = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <UserPlus className="mr-2 size-4" />
+        <Button variant={"default"} className="cursor-pointer">
+          <UserPlus className="size-4" />
           <span>Crear Usuario</span>
         </Button>
       </DialogTrigger>
@@ -25,7 +27,14 @@ const CreateUserModal = () => {
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div>
-          <FormCreateUser />
+          <FormCreateUser
+            onCancel={(result) => {
+              setIsOpen(false);
+            }}
+            onCreate={(result) => {
+              console.log("Create:", result);
+            }}
+          />
         </div>
       </DialogContent>
     </Dialog>
