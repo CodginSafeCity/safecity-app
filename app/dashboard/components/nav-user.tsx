@@ -1,0 +1,102 @@
+import useLogout from "@/app/(auth)/hooks/use-logout";
+import useUserAuth from "@/app/(auth)/hooks/use-user-auth";
+import { UserProfile } from "@/app/(auth)/types/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
+import { useAuthStore } from "@/store/auth-store";
+import { ChevronsUpDown, LogOut } from "lucide-react";
+import { useEffect, useState } from "react";
+
+type NavUserProps = {
+  // Add any props if needed
+};
+
+export default function NavUser({}: NavUserProps) {
+  const [userAuth, setUserAuth] = useState<UserProfile | null>(null);
+
+  const { isMobile } = useSidebar();
+
+  const { getUserProfile } = useUserAuth();
+  const { clearAuthState } = useAuthStore();
+  const { logout } = useLogout();
+
+  const onLogout = async () => {
+    // console.log("Logging out...");
+    await logout();
+
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    clearAuthState();
+    window.location.href = "/";
+  };
+  useEffect(() => {
+    const profile = getUserProfile();
+    setUserAuth(profile);
+  }, []);
+
+  return (
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              size={"lg"}
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src={userAuth?.avatarUrl}></AvatarImage>
+                <AvatarFallback>JD</AvatarFallback>
+              </Avatar>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">
+                  {userAuth?.name} {userAuth?.lastName}
+                </span>
+                <span className="truncate text-xs">{userAuth?.email}</span>
+              </div>
+              <ChevronsUpDown className="ml-auto size-4" />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            side={isMobile ? "bottom" : "right"}
+            align="end"
+            sideOffset={4}
+          >
+            <DropdownMenuLabel className="p-0 font-normal">
+              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage src={userAuth?.avatarUrl} alt={userAuth?.name} />
+                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">
+                    {userAuth?.name} {userAuth?.lastName}
+                  </span>
+                  <span className="truncate text-xs">{userAuth?.email}</span>
+                </div>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="cursor-pointer" onSelect={onLogout}>
+              <LogOut />
+              Cerrar sesión
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  );
+}

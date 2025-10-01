@@ -1,27 +1,30 @@
 "use client";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import useLogin from "../hooks/useLogin";
-import { loginSchema } from "../types/validations";
-import z from "zod";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
+import useLogin from "../hooks/use-login";
 import { Button } from "@/components/ui/button";
 import FormInputField from "@/components/ui/form-field";
 import Link from "next/link";
+import { FormLoginData } from "../types/auth";
+import { useAuthStore } from "@/store/auth-store";
 
 const LoginForm = () => {
-  const { formLogin, login } = useLogin();
+  const { formLogin, login, isLoading } = useLogin();
+  const { setToken } = useAuthStore();
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: FormLoginData) => {
+    try {
+      const data = await login(values);
+      setToken(data.attributes.access_token);
+
+      document.cookie = `token=${data.attributes.access_token}; path=/; max-age=86400`; // 1 day
+
+      window.location.href = "/dashboard";
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return (
     <Form {...formLogin}>
       <form onSubmit={formLogin.handleSubmit(onSubmit)}>
@@ -29,7 +32,7 @@ const LoginForm = () => {
           <div className="grid gap-3">
             <FormInputField
               control={formLogin.control}
-              name="username"
+              name="email"
               label="Correo electrónico"
               type="text"
               placeholder="tucorreo@ejemplo.com"
@@ -48,8 +51,13 @@ const LoginForm = () => {
             </Link>
           </div>
           <div className="grid gap-3">
-            <Button size={"lg"} type="submit">
-              Iniciar sesión
+            <Button
+              size={"lg"}
+              type="submit"
+              className="cursor-pointer"
+              disabled={isLoading}
+            >
+              {isLoading ? "Iniciado sesión" : "Iniciar sesión"}
             </Button>
           </div>
         </div>

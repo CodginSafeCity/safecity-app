@@ -1,24 +1,51 @@
-import axios from 'axios';
+import { useAuthStore } from "@/store/auth-store";
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
-const instance = axios.create({
+const apiInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
+    "Content-Type": "application/json",
+    Accept: "application/json",
   },
-    withCredentials: true,
+  withCredentials: true,
 });
 
-// Intercept requests to include auth token if available
-// instance.interceptors.request.use(
-//   (config) => {
-//     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//     },
-//     (error) => Promise.reject(error)
-// );
+// Add a request interceptor
+apiInstance.interceptors.request.use(
+  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+    const token = useAuthStore.getState().token;
 
-export default instance;
+    const isAuthRoute =
+      config.url?.includes("/auth") ||
+      config.url?.includes("/login") ||
+      config.url?.includes("/register");
+
+    if (token && !isAuthRoute) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    // Handle request error
+    return Promise.reject(error);
+  }
+);
+
+// Add a response interceptor
+apiInstance.interceptors.response.use(
+  (response: AxiosResponse): AxiosResponse => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Optionally handle unauthorized errors, e.g., logout user or refresh token
+      useAuthStore.getState().clearAuthState();
+
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      }
+    }
+    // Handle response error
+    return Promise.reject(error);
+  }
+);
+
+export { apiInstance };

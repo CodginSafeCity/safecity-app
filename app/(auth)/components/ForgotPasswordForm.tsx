@@ -5,11 +5,22 @@ import useForgotPassword from "../hooks/useForgotPassword";
 import FormInputField from "@/components/ui/form-field";
 import { Button } from "@/components/ui/button";
 
-const ForgotPasswordForm = () => {
-  const { formForgotPassword, sendResetLink } = useForgotPassword();
-  const onSubmit = (values: z.infer<typeof forgotPasswordSchema>) => {
-    console.log(values);
+interface ForgotPasswordFormProps {
+  linkSended: (state: boolean) => void;
+}
+
+const ForgotPasswordForm = ({ linkSended }: ForgotPasswordFormProps) => {
+  const { formForgotPassword, sendResetLink, isSending } = useForgotPassword();
+
+  const onSubmit = async (values: z.infer<typeof forgotPasswordSchema>) => {
+    try {
+      await sendResetLink(values);
+      linkSended(true);
+    } catch (error) {
+      linkSended(false);
+    }
   };
+
   return (
     <Form {...formForgotPassword}>
       <form onSubmit={formForgotPassword.handleSubmit(onSubmit)}>
@@ -24,8 +35,8 @@ const ForgotPasswordForm = () => {
             />
           </div>
           <div className="grid gap-3">
-            <Button size={"lg"} type="submit">
-              Enviar enlace de restablecimiento
+            <Button size={"lg"} type="submit" disabled={isSending}>
+              {isSending ? "Enviando..." : "Enviar enlace de restablecimiento"}
             </Button>
           </div>
         </div>
