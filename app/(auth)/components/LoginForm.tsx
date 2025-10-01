@@ -15,13 +15,30 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FormInputField from "@/components/ui/form-field";
 import Link from "next/link";
+import { FormLoginData } from "../types/auth";
+import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/auth-store";
+import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
-  const { formLogin, login } = useLogin();
+  const { formLogin, login, isLoading } = useLogin();
+  const { setToken } = useAuthStore();
+  const searchParams = useSearchParams();
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: FormLoginData) => {
+    try {
+      const data = await login(values);
+      setToken(data.accessToken);
+
+      document.cookie = `token=${data.accessToken}; path=/; max-age=86400`; // 1 day
+
+      const redirectTo = searchParams.get("redirectTo") || "/dashboard";
+      window.location.href = redirectTo;
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return (
     <Form {...formLogin}>
       <form onSubmit={formLogin.handleSubmit(onSubmit)}>
@@ -48,8 +65,13 @@ const LoginForm = () => {
             </Link>
           </div>
           <div className="grid gap-3">
-            <Button size={"lg"} type="submit">
-              Iniciar sesión
+            <Button
+              size={"lg"}
+              type="submit"
+              className="cursor-pointer"
+              disabled={isLoading}
+            >
+              {isLoading ? "Iniciado sesión" : "Iniciar sesión"}
             </Button>
           </div>
         </div>

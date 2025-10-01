@@ -4,12 +4,29 @@ import FormInputField from "@/components/ui/form-field";
 import useResetPassword from "../hooks/useResetPassword";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { useEffect } from "react";
 
-const ResetPasswordForm = () => {
+interface ResetPasswordFormProps {
+  email?: string | null;
+  token?: string | null;
+}
+
+const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
   const { resetPassword, formResetPassword } = useResetPassword();
-  const onSubmit = (values: z.infer<typeof resetPasswordSchema>) => {
-    console.log(values);
+
+  const onSubmit = async (values: z.infer<typeof resetPasswordSchema>) => {
+    await resetPassword(values);
   };
+
+  useEffect(() => {
+    if (email) {
+      formResetPassword.setValue("email", email);
+    }
+    if (token) {
+      formResetPassword.setValue("token", token);
+    }
+  }, [email, token, formResetPassword]);
+
   return (
     <Form {...formResetPassword}>
       <form onSubmit={formResetPassword.handleSubmit(onSubmit)}>

@@ -7,7 +7,8 @@ const useResetPassword = () => {
   const formResetPassword = useForm<z.infer<typeof resetPasswordSchema>>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      email: "jhondow@example.com",
+      email: "",
+      token: "",
       newPassword: "",
       confirmNewPassword: "",
     },

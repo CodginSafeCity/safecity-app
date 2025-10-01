@@ -16,7 +16,6 @@ type NavMainProps = {
 export function NavMain({ items }: NavMainProps) {
   const pathName = usePathname();
 
-  console.log("Current path:", pathName);
   return (
     <SidebarGroup>
       <SidebarMenu>

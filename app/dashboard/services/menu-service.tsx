@@ -1,5 +1,5 @@
-import items from "../data/menu-items";
+import { menuItems } from "../data/menu-items";
 
 export const getMenuItems = () => {
-  return items;
+  return menuItems;
 };

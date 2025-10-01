@@ -1,5 +1,5 @@
 "use client";
-import UserListTable from "./components/(table)/listUserTable";
+import UserListTable from "./components/(table)/list-user-table";
 import CreateUserModal from "./components/create-user-modal";
 
 export default function UsersPage() {

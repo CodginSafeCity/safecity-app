@@ -1,28 +1,29 @@
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "./axios";
 
+interface ApiResponse<T> {
+  data: T;
+  message: string;
+  status: number;
+}
 export const httpRequest = async ({
   url,
   method,
   data,
   params,
 }: AxiosRequestConfig): Promise<any> => {
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
   const config: AxiosRequestConfig = {
     url,
     method,
     data,
     params,
-    headers,
   };
 
-  return new Promise((resolve, reject) => {
-    axios(config)
-      .then((response) => resolve(response.data))
-      .catch((error) => reject(error));
-  });
+  try {
+    const response: AxiosResponse<ApiResponse<any>> = await axios(config);
+    return response.data;
+  } catch (error: any) {
+    // You can handle specific error cases here if needed
+    throw error;
+  }
 };

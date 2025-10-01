@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
+import { Textarea } from "./textarea";
 
 type options = {
   label: string;
@@ -26,7 +27,14 @@ type FormFieldProps = {
   name: string;
   label?: string;
   placeholder?: string;
-  type?: "text" | "email" | "password" | "checkbox" | "switch" | "select";
+  type?:
+    | "text"
+    | "email"
+    | "password"
+    | "checkbox"
+    | "switch"
+    | "select"
+    | "textarea";
   options?: options[];
   // Type props for input component
   [x: string]: any;
@@ -63,6 +71,8 @@ const FormInputField = ({
                   ))}
                 </SelectContent>
               </Select>
+            ) : type === "textarea" ? (
+              <Textarea placeholder={placeholder} {...field} {...props} />
             ) : (
               <Input
                 type={type}

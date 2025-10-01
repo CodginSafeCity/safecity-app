@@ -1,29 +1,33 @@
 export type FormLoginData = {
-    username: string;
-    password: string;
-}
+  username: string;
+  password: string;
+};
 
 export type FormRegisterData = {
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-}
+  name: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
 export type FormForgotPasswordData = {
-    email: string;
-}
+  email: string;
+};
 
 export type FormResetPasswordData = {
-    newPassword: string;
-    confirmNewPassword: string;
-}
+  newPassword: string;
+  confirmNewPassword: string;
+};
 
 export type AuthResponse = {
-    token: string;
-    user: {
-        id: string;
-        username: string;
-        email: string;
-    };
-}
+  token: string;
+};
+
+export type UserProfile = {
+  id: string;
+  name: string;
+  lastName: string;
+  email: string;
+  avatarUrl?: string;
+};

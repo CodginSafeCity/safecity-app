@@ -1,14 +1,24 @@
 "use client";
-
 import { GalleryVerticalEnd } from "lucide-react";
 import LoginForm from "../../components/LoginForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useAuthStore } from "@/store/auth-store";
+import { useEffect } from "react";
 
 const LoginPage = () => {
+  const { token } = useAuthStore();
+
   const onSwitchToRegister = () => {
     // Logic to switch to the register page
   };
+
+  useEffect(() => {
+    if (token) {
+      window.location.href = "/dashboard";
+    }
+  }, [token]);
+
   return (
     <div className="grid min-h-svh lg:grid-cols-1">
       <div className="flex flex-col gap-4 p-6 md:p-10">

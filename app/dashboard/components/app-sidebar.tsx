@@ -2,6 +2,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -12,6 +13,7 @@ import { NavMain } from "./main-nav";
 import useListMenuItems from "../hooks/useListMenuItems";
 import { useEffect, useState } from "react";
 import { MenuItem } from "../types/menu-item";
+import NavUser from "./nav-user";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [items, setItems] = useState<MenuItem[]>([]);
@@ -44,6 +46,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={items} />
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser />
+      </SidebarFooter>
     </Sidebar>
   );
 }
