@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useAuthStore } from "@/store/auth-store";
 import { useEffect } from "react";
 
-const LoginPage = () => {
+export default function LoginPage() {
   const { token } = useAuthStore();
 
   const onSwitchToRegister = () => {
@@ -61,6 +61,4 @@ const LoginPage = () => {
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}

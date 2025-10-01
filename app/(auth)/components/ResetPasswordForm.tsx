@@ -5,17 +5,29 @@ import useResetPassword from "../hooks/useResetPassword";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 interface ResetPasswordFormProps {
-  email?: string | null;
-  token?: string | null;
+  isResetPassword: (state: boolean) => void;
 }
 
-const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
-  const { resetPassword, formResetPassword } = useResetPassword();
+const ResetPasswordForm = ({ isResetPassword }: ResetPasswordFormProps) => {
+  const { resetPassword, formResetPassword, isUpdatingPassword } =
+    useResetPassword();
+
+  const params = useSearchParams();
+
+  const email = params.get("email");
+  const token = params.get("token");
 
   const onSubmit = async (values: z.infer<typeof resetPasswordSchema>) => {
-    await resetPassword(values);
+    try {
+      await resetPassword(values);
+      isResetPassword(true);
+    } catch (error) {
+      isResetPassword(false);
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -44,7 +56,7 @@ const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
           <div className="grid gap-3">
             <FormInputField
               control={formResetPassword.control}
-              name="newPassword"
+              name="password"
               label="Nueva contraseña"
               type="password"
               placeholder="**********"
@@ -53,15 +65,20 @@ const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
           <div className="grid gap-3">
             <FormInputField
               control={formResetPassword.control}
-              name="confirmNewPassword"
+              name="password_confirmation"
               label="Confirmar nueva contraseña"
               type="password"
               placeholder="**********"
             />
           </div>
           <div className="grid gap-3">
-            <Button size={"lg"} type="submit">
-              Actualizar contraseña
+            <Button
+              size={"lg"}
+              type="submit"
+              disabled={isUpdatingPassword}
+              className="cursor-pointer"
+            >
+              {isUpdatingPassword ? "Actualizando..." : "Actualizar contraseña"}
             </Button>
           </div>
         </div>

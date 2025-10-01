@@ -1,14 +1,14 @@
 export type FormLoginData = {
-  username: string;
+  email: string;
   password: string;
 };
 
 export type FormRegisterData = {
   name: string;
-  lastName: string;
+  last_name: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  password_confirmation: string;
 };
 
 export type FormForgotPasswordData = {
@@ -18,6 +18,13 @@ export type FormForgotPasswordData = {
 export type FormResetPasswordData = {
   newPassword: string;
   confirmNewPassword: string;
+};
+
+export type ResetPasswordData = {
+  email: string;
+  token: string;
+  password: string;
+  password_confirmation: string;
 };
 
 export type AuthResponse = {

@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import z from "zod";
 
 const RegisterForm = () => {
-  const { formRegister, register } = useRegister();
+  const { formRegister, register, isLoading } = useRegister();
 
-  const onSubmit = (values: z.infer<typeof registerSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof registerSchema>) => {
+    await register(values);
   };
   return (
     <Form {...formRegister}>
@@ -28,7 +28,7 @@ const RegisterForm = () => {
             <div className="flex-1">
               <FormInputField
                 control={formRegister.control}
-                name="lastName"
+                name="last_name"
                 label="Apellidos"
                 type="text"
                 placeholder="Smith Williams"
@@ -56,14 +56,19 @@ const RegisterForm = () => {
           <div className="grid gap-3">
             <FormInputField
               control={formRegister.control}
-              name="confirmPassword"
+              name="password_confirmation"
               label="Confirmar contraseña"
               type="password"
               placeholder="**********"
             />
           </div>
           <div className="grid gap-3">
-            <Button size={"lg"} type="submit">
+            <Button
+              size={"lg"}
+              type="submit"
+              className="cursor-pointer"
+              disabled={isLoading}
+            >
               Crear cuenta
             </Button>
           </div>

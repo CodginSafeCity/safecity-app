@@ -1,39 +1,25 @@
 "use client";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import useLogin from "../hooks/useLogin";
-import { loginSchema } from "../types/validations";
-import z from "zod";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
+import useLogin from "../hooks/use-login";
 import { Button } from "@/components/ui/button";
 import FormInputField from "@/components/ui/form-field";
 import Link from "next/link";
 import { FormLoginData } from "../types/auth";
-import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth-store";
-import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
   const { formLogin, login, isLoading } = useLogin();
   const { setToken } = useAuthStore();
-  const searchParams = useSearchParams();
 
   const onSubmit = async (values: FormLoginData) => {
     try {
       const data = await login(values);
-      setToken(data.accessToken);
+      setToken(data.attributes.access_token);
 
-      document.cookie = `token=${data.accessToken}; path=/; max-age=86400`; // 1 day
+      document.cookie = `token=${data.attributes.access_token}; path=/; max-age=86400`; // 1 day
 
-      const redirectTo = searchParams.get("redirectTo") || "/dashboard";
-      window.location.href = redirectTo;
+      window.location.href = "/dashboard";
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +32,7 @@ const LoginForm = () => {
           <div className="grid gap-3">
             <FormInputField
               control={formLogin.control}
-              name="username"
+              name="email"
               label="Correo electrónico"
               type="text"
               placeholder="tucorreo@ejemplo.com"

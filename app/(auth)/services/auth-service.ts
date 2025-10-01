@@ -1,32 +1,38 @@
 import { httpRequest } from "@/lib/http-request";
-import { FormLoginData, FormRegisterData } from "../types/auth";
-
-export const loginServiceTest = async (credentials: FormLoginData) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (
-        credentials.username === "test" &&
-        credentials.password === "password"
-      ) {
-        resolve({ accessToken: "mocked_access_token_123456" });
-      } else {
-        reject(new Error("Invalid credentials"));
-      }
-    }, 2000);
-  });
-};
+import {
+  FormLoginData,
+  FormRegisterData,
+  ResetPasswordData,
+} from "../types/auth";
 
 export const loginService = async (credentials: FormLoginData) => {
   return httpRequest({
-    url: "/auth/login",
+    // url: "/auth/login",
+    url: "/login",
     method: "POST",
     data: credentials,
   });
 };
 
+export const sendResetLinkService = async (data: { email: string }) => {
+  return httpRequest({
+    url: "/forgot-password",
+    method: "POST",
+    data,
+  });
+};
+
+export const resetPasswordService = async (data: ResetPasswordData) => {
+  return httpRequest({
+    url: "/reset-password",
+    method: "POST",
+    data,
+  });
+};
+
 export const registerService = async (data: FormRegisterData) => {
   return httpRequest({
-    url: "/auth/register",
+    url: "/register",
     method: "POST",
     data,
   });

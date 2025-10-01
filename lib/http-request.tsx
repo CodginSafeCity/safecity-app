@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import axios from "./axios";
+import { apiInstance } from "./axios";
 
 interface ApiResponse<T> {
   data: T;
@@ -20,7 +20,7 @@ export const httpRequest = async ({
   };
 
   try {
-    const response: AxiosResponse<ApiResponse<any>> = await axios(config);
+    const response: AxiosResponse<ApiResponse<any>> = await apiInstance(config);
     return response.data;
   } catch (error: any) {
     // You can handle specific error cases here if needed

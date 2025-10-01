@@ -1,3 +1,4 @@
+"use client";
 import {
   SidebarInset,
   SidebarProvider,
@@ -13,12 +14,18 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { useAuthStore } from "@/store/auth-store";
 
-export default function DashboardLayout({
+export default function asyncDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { token } = useAuthStore();
+
+  if (!token) {
+    // window.location.href = "/login";
+  }
   return (
     <SidebarProvider>
       <AppSidebar />

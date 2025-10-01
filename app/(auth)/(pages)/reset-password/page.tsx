@@ -3,17 +3,10 @@ import { Button } from "@/components/ui/button";
 import { GalleryVerticalEnd } from "lucide-react";
 import Link from "next/link";
 import ResetPasswordForm from "../../components/ResetPasswordForm";
-import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 
 const ResetPasswordPage = () => {
   const [passwordReseted, setPasswordReseted] = useState<boolean>(false);
-
-  const params = useSearchParams();
-  const token = params.get("token");
-  const email = params.get("email");
-
-  console.log(token, email);
 
   const onSwitchToLogin = () => {
     // Logic to switch to the login page
@@ -45,7 +38,9 @@ const ResetPasswordPage = () => {
                     proteger tu información personal.
                   </p>
                 </div>
-                <ResetPasswordForm email={email} token={token} />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ResetPasswordForm isResetPassword={setPasswordReseted} />
+                </Suspense>
               </>
             ) : (
               <>
@@ -77,9 +72,7 @@ const ResetPasswordPage = () => {
                 onClick={onSwitchToLogin}
                 asChild
               >
-                <Link href="/login" className="hover:text-primary">
-                  Iniciar sesión
-                </Link>
+                <Link href="/login">Iniciar sesión</Link>
               </Button>
             </div>
           </div>

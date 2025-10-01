@@ -1,3 +1,4 @@
+import useLogout from "@/app/(auth)/hooks/use-logout";
 import useUserAuth from "@/app/(auth)/hooks/use-user-auth";
 import { UserProfile } from "@/app/(auth)/types/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,6 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuthStore } from "@/store/auth-store";
 import { ChevronsUpDown, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -28,7 +30,18 @@ export default function NavUser({}: NavUserProps) {
   const { isMobile } = useSidebar();
 
   const { getUserProfile } = useUserAuth();
+  const { clearAuthState } = useAuthStore();
+  const { logout } = useLogout();
 
+  const onLogout = async () => {
+    // console.log("Logging out...");
+    await logout();
+
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    clearAuthState();
+    window.location.href = "/";
+  };
   useEffect(() => {
     const profile = getUserProfile();
     setUserAuth(profile);
@@ -77,7 +90,7 @@ export default function NavUser({}: NavUserProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" onSelect={onLogout}>
               <LogOut />
               Cerrar sesión
             </DropdownMenuItem>
