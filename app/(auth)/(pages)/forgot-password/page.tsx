@@ -77,7 +77,7 @@ const ForgotPasswordPage = () => {
                 onClick={onSwitchToLogin}
                 asChild
               >
-                <Link href="/login">Iniciar sesión</Link>
+                <Link href="/">Iniciar sesión</Link>
               </Button>
             </div>
           </div>

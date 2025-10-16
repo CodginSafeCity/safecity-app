@@ -21,7 +21,7 @@ export default function ListUserPage({ controlEntityId }: ListUserPageProps) {
 
   const { getUsers, isLoading } = useListUser();
 
-  console.log("Params ID:", controlEntityId);
+  // console.log("Params ID:", controlEntityId);
   useEffect(() => {
     const fetchData = async () => {
       const data = await getUsers(controlEntityId);

@@ -19,7 +19,7 @@ const UserListTable = () => {
     const fetchData = async () => {
       const users = await getUsers();
 
-      console.log(users);
+      // console.log(users);
       setData(users);
     };
     fetchData();

@@ -19,3 +19,20 @@ export const createTicketSchema = z.object({
 });
 
 export type CreateTicketFormData = z.infer<typeof createTicketSchema>;
+
+export const updateStateTicketSchema = z.object({
+  status: z
+    .string()
+    .min(1)
+    .max(100)
+    .refine(
+      (val) => {
+        return ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"].includes(val);
+      },
+      {
+        message: "Invalid status value",
+      }
+    ),
+});
+
+export type UpdateStateTicketFormData = z.infer<typeof updateStateTicketSchema>;

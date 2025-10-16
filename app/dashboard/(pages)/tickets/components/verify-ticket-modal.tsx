@@ -12,6 +12,7 @@ import {
 import { BadgeCheck } from "lucide-react";
 import { useState } from "react";
 import { IIncident } from "../types/ticket";
+import useUpdateStatusTicket from "../hooks/use-update-ticket";
 
 interface VerifyTicketModalProps {
   // You can add props here if needed, e.g., ticket details
@@ -19,6 +20,18 @@ interface VerifyTicketModalProps {
 }
 export default function VerifyTicketModal({ ticket }: VerifyTicketModalProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const { formUpdate, updateStateTicket, isLoading } = useUpdateStatusTicket();
+
+  const handleVerify = async () => {
+    try {
+      await updateStateTicket(ticket.id, { status: "IN_PROGRESS" });
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating ticket status:", error);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -41,8 +54,13 @@ export default function VerifyTicketModal({ ticket }: VerifyTicketModalProps) {
               Cancelar
             </Button>
           </DialogClose>
-          <Button variant={"default"} className="cursor-pointer">
-            Verificar
+          <Button
+            variant={"default"}
+            className="cursor-pointer"
+            disabled={isLoading}
+            onClick={handleVerify}
+          >
+            {isLoading ? "Verificando..." : "Verificar"}
           </Button>
         </DialogFooter>
       </DialogContent>

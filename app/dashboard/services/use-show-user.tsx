@@ -12,7 +12,7 @@ const useShowUser = () => {
     try {
       setIsLoading(true);
       const { data } = await getUserService(userId);
-      console.log("User fetched:", data);
+
       return data;
     } catch (error) {
       console.log(error);

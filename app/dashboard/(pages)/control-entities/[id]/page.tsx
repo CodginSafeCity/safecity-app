@@ -4,6 +4,7 @@ import ListUserPage from "./list-user-page";
 import ListReportPage from "./list-report-page";
 import ListZonePage from "./list-zone-page";
 import { useParams } from "next/navigation";
+import DashboardOverviewPage from "./overview";
 
 export default function Page() {
   const params = useParams();
@@ -24,7 +25,7 @@ export default function Page() {
           <TabsTrigger value="zones">Zonas</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
-          <div>Overview</div>
+          <DashboardOverviewPage controlEntityId={controlEntityId} />
         </TabsContent>
         <TabsContent value="users">
           <ListUserPage controlEntityId={controlEntityId} />

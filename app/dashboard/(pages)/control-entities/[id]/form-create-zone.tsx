@@ -24,8 +24,8 @@ export default function FormCreateZone({
   const { isLoading: isLoadingCities, listCities } = useListCity();
 
   const handleCreateZone = async (values: CreateZoneFormData) => {
-    console.log("Created Zone: ", values);
     const zone = await createZone(values);
+    window.location.reload();
   };
 
   const fetchCities = async () => {

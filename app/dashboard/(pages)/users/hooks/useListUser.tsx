@@ -9,7 +9,7 @@ const useListUser = () => {
     try {
       setIsLoading(true);
       const { data } = await getUsersService();
-      console.log("Users fetched:", data);
+      // console.log("Users fetched:", data);
       return data;
     } catch (error) {
       console.log(error);

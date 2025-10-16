@@ -1,6 +1,9 @@
 import { ApiResponse, httpRequest } from "@/lib/http-request";
 import { IIncident } from "../types/ticket";
-import { CreateTicketFormData } from "../types/validation";
+import {
+  CreateTicketFormData,
+  UpdateStateTicketFormData,
+} from "../types/validation";
 
 export const getIncidentsService = async (): Promise<
   ApiResponse<IIncident[]>
@@ -42,6 +45,17 @@ export const showIncidentService = async (
 export const updateIncidentService = async (
   incidentId: string,
   data: Partial<CreateTicketFormData>
+): Promise<ApiResponse<IIncident>> => {
+  return httpRequest({
+    url: `/incidents/${incidentId}`,
+    method: "PUT",
+    data,
+  });
+};
+
+export const updateStatusService = async (
+  incidentId: string,
+  data: Partial<UpdateStateTicketFormData>
 ): Promise<ApiResponse<IIncident>> => {
   return httpRequest({
     url: `/incidents/${incidentId}`,
