@@ -74,7 +74,7 @@ const FormCreateUser = ({ onCancel, onCreate }: FormCreateUserProps) => {
               placeholder="**********"
             />
           </div>
-          <div className="grid gap-3">
+          {/* <div className="grid gap-3">
             <FormInputField
               control={formRegister.control}
               name="role_id"
@@ -86,7 +86,7 @@ const FormCreateUser = ({ onCancel, onCreate }: FormCreateUserProps) => {
                 { label: "verificador", value: "verifier" },
               ]}
             />
-          </div>
+          </div> */}
           <div className="flex justify-end gap-3">
             <Button
               onClick={handleCancel}

@@ -1,33 +1,30 @@
+import { set } from "zod";
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 interface AuthState {
-  isAuthenticated: boolean;
   token: string | null;
-  user: object | null;
   setToken: (token: string) => void;
-  login: (token: string, user: object) => void;
   clearAuthState: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  isAuthenticated: false,
-  token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
-  user: null,
-  setToken: (token) => {
-    if (typeof window !== "undefined") {
-      if (token) {
-        localStorage.setItem("token", token);
-      } else {
-        localStorage.removeItem("token");
-      }
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      token: null,
+      setToken: (token: string) => set({ token }),
+      clearAuthState: () => set({ token: null }),
+    }),
+    {
+      name: "auth-storage",
+      storage:
+        typeof window !== "undefined"
+          ? createJSONStorage(() => localStorage)
+          : createJSONStorage(() => ({
+              getItem: (name: string) => null,
+              setItem: (name: string, value: string) => {},
+              removeItem: (name: string) => {},
+            })),
     }
-    set({ token, isAuthenticated: !!token });
-  },
-  login: (token, user) => set({ isAuthenticated: true, token, user }),
-  clearAuthState: () => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("token");
-    }
-    set({ isAuthenticated: false, token: null });
-  },
-}));
+  )
+);

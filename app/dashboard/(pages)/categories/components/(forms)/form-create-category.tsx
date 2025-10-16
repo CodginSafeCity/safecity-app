@@ -1,6 +1,5 @@
-import z from "zod";
 import useCreateCategory from "../../hooks/use-create-category";
-import { createCategorySchema } from "../../types/validation";
+import { CreateCategoryType } from "../../types/validation";
 import FormInputField from "@/components/ui/form-field";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -14,12 +13,13 @@ export default function FormCreateCategory({
   onCancel,
   onCreate,
 }: FormCreateUserProps) {
-  const { formCreate } = useCreateCategory();
+  const { formCreate, isLoading, createCategory } = useCreateCategory();
 
-  const onSubmit = (values: z.infer<typeof createCategorySchema>) => {
+  const onSubmit = async (values: CreateCategoryType) => {
     console.log(values);
-
+    await createCategory(values);
     onCreate({ result: true });
+    window.location.reload();
   };
 
   const handleCancel = () => {
@@ -58,8 +58,13 @@ export default function FormCreateCategory({
             >
               Cancelar
             </Button>
-            <Button size={"lg"} type="submit" className="cursor-pointer">
-              Crear
+            <Button
+              size={"lg"}
+              type="submit"
+              className="cursor-pointer"
+              disabled={isLoading}
+            >
+              {isLoading ? "Creando..." : "Crear"}
             </Button>
           </div>
         </div>

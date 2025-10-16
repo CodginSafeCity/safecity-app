@@ -7,20 +7,26 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Pen } from "lucide-react";
-import FormUpdateUser from "../../users/components/form-update-user";
 import { useState } from "react";
 import FormEditCategory from "./(forms)/form-edit-category";
+import { Button } from "@/components/ui/button";
+import { ICategory } from "../types/category";
 
-export default function EditCategoryModal() {
+type EditCategoryModalProps = {
+  category: ICategory;
+};
+
+export default function EditCategoryModal({
+  category,
+}: EditCategoryModalProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <div className="flex px-1 py-1 items-center hover:bg-gray-100 rounded-md cursor-pointer w-full">
-          <Pen className="size-4 mr-2" />
-          <span>Editar</span>
-        </div>
+        <Button variant={"outline"} size="icon" className="cursor-pointer">
+          <Pen className="size-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -29,6 +35,7 @@ export default function EditCategoryModal() {
         </DialogHeader>
         <div>
           <FormEditCategory
+            category={category}
             onCancel={(result) => {
               setIsOpen(false);
             }}

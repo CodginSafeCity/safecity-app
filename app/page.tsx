@@ -1,9 +1,16 @@
 "use client";
 import { useEffect } from "react";
 import LoginPage from "./(auth)/(pages)/login/page";
+import { useAuthStore } from "@/store/auth-store";
+import useUserAuth from "./(auth)/hooks/use-user-auth";
+import { LoadingComponent } from "@/components/loading";
+import { redirect, useRouter } from "next/navigation";
 
 export default function Home() {
+  const { isAuthenticated, isLoading } = useUserAuth();
+
   useEffect(() => {
+    console.log("hahahah");
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
@@ -17,5 +24,14 @@ export default function Home() {
       });
     }
   }, []);
+
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
+
+  if (!isLoading && isAuthenticated) {
+    redirect("/dashboard");
+  }
+
   return <LoginPage />;
 }

@@ -17,6 +17,7 @@ export const registerSchema = z
     password_confirmation: z
       .string()
       .min(1, { message: "Confirm Password is required" }),
+    roleId: z.string().min(1, { message: "Role is required" }),
   })
   .refine((data) => data.password === data.password_confirmation, {
     message: "Passwords do not match",
@@ -33,10 +34,10 @@ export const resetPasswordSchema = z
   .object({
     email: z.email({ message: "Invalid email address" }),
     token: z.string().min(1, { message: "Token is required" }),
-    password: z.string().min(1).max(100),
+    newPassword: z.string().min(1).max(100),
     password_confirmation: z.string().min(1).max(100),
   })
-  .refine((data) => data.password === data.password_confirmation, {
+  .refine((data) => data.newPassword === data.password_confirmation, {
     message: "Passwords do not match",
     path: ["password_confirmation"],
   });

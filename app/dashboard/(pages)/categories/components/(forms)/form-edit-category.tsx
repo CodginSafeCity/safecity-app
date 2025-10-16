@@ -1,25 +1,35 @@
 import z from "zod";
-import { createCategorySchema } from "../../types/validation";
+import {
+  createCategorySchema,
+  CreateCategoryType,
+} from "../../types/validation";
 import FormInputField from "@/components/ui/form-field";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import useUpdateCategory from "../../hooks/use-update-category";
+import { ICategory } from "../../types/category";
+import { is } from "zod/v4/locales";
 
-type FormCreateUserProps = {
+type FormEditCategoryProps = {
+  category: ICategory;
   onCancel: (result: boolean) => void;
   onUpdate: ({ result }: { result: boolean }) => void;
 };
 
 export default function FormEditCategory({
+  category,
   onCancel,
   onUpdate,
-}: FormCreateUserProps) {
-  const { formUpdate } = useUpdateCategory();
+}: FormEditCategoryProps) {
+  const { formUpdate, updateCategory, isLoading } = useUpdateCategory({
+    defaultValues: category,
+  });
 
-  const onSubmit = (values: z.infer<typeof createCategorySchema>) => {
+  const onSubmit = async (values: CreateCategoryType) => {
     console.log(values);
-
+    await updateCategory(category.id, values);
     onUpdate({ result: true });
+    window.location.reload();
   };
 
   const handleCancel = () => {
@@ -58,8 +68,13 @@ export default function FormEditCategory({
             >
               Cancelar
             </Button>
-            <Button size={"lg"} type="submit" className="cursor-pointer">
-              Actualizar
+            <Button
+              size={"lg"}
+              type="submit"
+              className="cursor-pointer"
+              disabled={isLoading}
+            >
+              {isLoading ? "Actualizando..." : "Actualizar"}
             </Button>
           </div>
         </div>

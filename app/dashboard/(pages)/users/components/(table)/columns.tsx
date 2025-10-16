@@ -1,14 +1,14 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { userListType } from "../../types/user";
+import { IUser } from "../../types/user";
 import { UserActions } from "./actions";
 
-export const columns: ColumnDef<userListType>[] = [
+export const columns: ColumnDef<IUser>[] = [
   {
     accessorKey: "name",
     header: "Name",
   },
   {
-    accessorKey: "lastName",
+    accessorKey: "last_name",
     header: "Last Name",
   },
   {
@@ -16,15 +16,19 @@ export const columns: ColumnDef<userListType>[] = [
     header: "Email",
   },
   {
-    accessorKey: "role.name",
     header: "Role",
+    cell: ({ row }) => {
+      const user: IUser = row.original;
+      const roleName = user.role?.name || "No Role";
+      return <span>{roleName}</span>;
+    },
   },
   {
     header: "Actions",
     accessorKey: "actions",
     cell: ({ row }) => {
-      const user = row.original;
-      return <UserActions />;
+      const user: IUser = row.original;
+      return <UserActions user={user} />;
     },
   },
 ];

@@ -1,10 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { TicketWithId } from "../../types/ticket";
+import { IIncident } from "../../types/ticket";
 import TicketActions from "./actions";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-export const columns: ColumnDef<TicketWithId>[] = [
+export const columns: ColumnDef<IIncident>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -22,8 +22,12 @@ export const columns: ColumnDef<TicketWithId>[] = [
     },
   },
   {
-    accessorKey: "categoryId",
+    // accessorKey: "categoryId",
     header: "Categoria",
+    cell: ({ row }) => {
+      const category = row.original.category;
+      return <span>{category ? category.name : "Sin categoría"}</span>;
+    },
   },
   {
     header: "Estado",
@@ -34,22 +38,22 @@ export const columns: ColumnDef<TicketWithId>[] = [
       let estatusText = "";
 
       switch (status) {
-        case "open":
+        case "OPEN":
           textColor = "text-blue-700";
           bgColor = "bg-blue-100";
           estatusText = "Abierto";
           break;
-        case "in_progress":
+        case "IN_PROGRESS":
           textColor = "text-yellow-700";
           bgColor = "bg-yellow-100";
           estatusText = "En Progreso";
           break;
-        case "resolved":
-          textColor = "text-green-700";
-          bgColor = "bg-green-100";
-          estatusText = "Resuelto";
-          break;
-        case "closed":
+        // case "resolved":
+        //   textColor = "text-green-700";
+        //   bgColor = "bg-green-100";
+        //   estatusText = "Resuelto";
+        //   break;
+        case "CLOSED":
           textColor = "text-red-700";
           bgColor = "bg-red-100";
           estatusText = "Cerrado";
@@ -62,7 +66,7 @@ export const columns: ColumnDef<TicketWithId>[] = [
     accessorKey: "reportedAt",
     header: "Fecha del reporte",
     cell: ({ row }) => {
-      const date = new Date(row.original.reportedAt);
+      const date = new Date(row.original.reported_at);
       return <span>{date.toLocaleString()}</span>;
     },
   },

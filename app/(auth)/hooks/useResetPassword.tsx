@@ -13,7 +13,7 @@ const useResetPassword = () => {
     defaultValues: {
       email: "",
       token: "",
-      password: "",
+      newPassword: "",
       password_confirmation: "",
     },
   });

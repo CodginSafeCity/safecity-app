@@ -7,8 +7,7 @@ import {
 
 export const loginService = async (credentials: FormLoginData) => {
   return httpRequest({
-    // url: "/auth/login",
-    url: "/login",
+    url: "/auth/login",
     method: "POST",
     data: credentials,
   });
@@ -16,7 +15,7 @@ export const loginService = async (credentials: FormLoginData) => {
 
 export const sendResetLinkService = async (data: { email: string }) => {
   return httpRequest({
-    url: "/forgot-password",
+    url: "/users/forgot-password",
     method: "POST",
     data,
   });
@@ -24,7 +23,7 @@ export const sendResetLinkService = async (data: { email: string }) => {
 
 export const resetPasswordService = async (data: ResetPasswordData) => {
   return httpRequest({
-    url: "/reset-password",
+    url: "/users/reset-password",
     method: "POST",
     data,
   });
@@ -32,7 +31,7 @@ export const resetPasswordService = async (data: ResetPasswordData) => {
 
 export const registerService = async (data: FormRegisterData) => {
   return httpRequest({
-    url: "/register",
+    url: "/auth/register",
     method: "POST",
     data,
   });

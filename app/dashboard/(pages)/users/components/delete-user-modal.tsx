@@ -10,15 +10,24 @@ import {
 } from "@/components/ui/dialog";
 import { Dialog } from "@radix-ui/react-dialog";
 import { Trash } from "lucide-react";
+import { useDeleteUser } from "../hooks/useDeleteUser";
 
-export default function DeleteUserModal() {
+type DeleteUserModalProps = {
+  userId: string;
+};
+export default function DeleteUserModal({ userId }: DeleteUserModalProps) {
+  const { isLoading, deleteUser } = useDeleteUser();
+
+  const handleDelete = async () => {
+    await deleteUser(userId);
+    window.location.reload();
+  };
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <div className="flex px-1 py-1 items-center hover:bg-red-50 rounded-md cursor-pointer w-full text-red-400">
-          <Trash className="size-4 mr-2 text-red-400" />
-          <span>Eliminar</span>
-        </div>
+      <DialogTrigger asChild title="Eliminar usuario">
+        <Button variant={"destructive"} className="p-0 cursor-pointer">
+          <Trash className="size-4 text-white" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -37,8 +46,13 @@ export default function DeleteUserModal() {
               Cancelar
             </Button>
           </DialogClose>
-          <Button variant="destructive" className="cursor-pointer">
-            Eliminar
+          <Button
+            variant="destructive"
+            className="cursor-pointer"
+            disabled={isLoading}
+            onClick={handleDelete}
+          >
+            {isLoading ? "Eliminando..." : "Eliminar"}
           </Button>
         </DialogFooter>
       </DialogContent>

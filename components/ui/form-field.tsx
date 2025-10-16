@@ -8,13 +8,15 @@ import {
 } from "./form";
 import { Input } from "./input";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./select";
+import Select from "react-select";
+
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "./select";
 import { Textarea } from "./textarea";
 
 type options = {
@@ -59,24 +61,40 @@ const FormInputField = ({
           )}
           <FormControl>
             {type === "select" ? (
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={placeholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  {options?.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ) : type === "textarea" ? (
+              <Select
+                options={options}
+                defaultValue={field.value}
+                onChange={(selectedOption) => {
+                  field.onChange(selectedOption.value);
+                }}
+                styles={{
+                  menu: (provided) => ({
+                    ...provided,
+                    zIndex: 500, // Set your desired z-index value
+                  }),
+                }}
+                // {...field}
+                // {...props}
+              />
+            ) : // <Select>
+            //   <SelectTrigger className="w-full">
+            //     <SelectValue placeholder={placeholder} />
+            //   </SelectTrigger>
+            //   <SelectContent style={{ zIndex: 500 }}>
+            //     {options?.map((opt) => (
+            //       <SelectItem key={opt.value} value={opt.value}>
+            //         {opt.label}
+            //       </SelectItem>
+            //     ))}
+            //   </SelectContent>
+            // </Select>
+            type === "textarea" ? (
               <Textarea placeholder={placeholder} {...field} {...props} />
             ) : (
               <Input
                 type={type}
                 placeholder={placeholder}
+                autoFocus={false}
                 {...props}
                 {...field}
               />

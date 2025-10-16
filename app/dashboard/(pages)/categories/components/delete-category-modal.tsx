@@ -10,15 +10,27 @@ import {
 } from "@/components/ui/dialog";
 import { Dialog } from "@radix-ui/react-dialog";
 import { Trash } from "lucide-react";
+import useDeleteCategory from "../hooks/use-delete-category";
 
-export default function DeleteCategoryModal() {
+type DeleteCategoryModalProps = {
+  categoryId: string;
+};
+export default function DeleteCategoryModal({
+  categoryId,
+}: DeleteCategoryModalProps) {
+  const { deleteCategory, isLoading } = useDeleteCategory();
+
+  const handleDelete = async () => {
+    await deleteCategory(categoryId);
+    window.location.reload();
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex px-1 py-1 items-center hover:bg-red-50 rounded-md cursor-pointer w-full text-red-400">
-          <Trash className="size-4 mr-2 text-red-400" />
-          <span>Eliminar</span>
-        </div>
+        <Button variant={"destructive"} size="icon" className="cursor-pointer">
+          <Trash className="size-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -37,8 +49,13 @@ export default function DeleteCategoryModal() {
               Cancelar
             </Button>
           </DialogClose>
-          <Button variant="destructive" className="cursor-pointer">
-            Eliminar
+          <Button
+            variant="destructive"
+            className="cursor-pointer"
+            disabled={isLoading}
+            onClick={handleDelete}
+          >
+            {isLoading ? "Eliminando..." : "Eliminar"}
           </Button>
         </DialogFooter>
       </DialogContent>

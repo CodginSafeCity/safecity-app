@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/ui/data-table";
 import useListUser from "../../hooks/use-list-categories";
 import { useEffect, useState } from "react";
-import { CategoryWithId } from "../../types/category";
+import { ICategory } from "../../types/category";
 import { columns } from "./columns";
 import {
   Card,
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 
 export default function CategoryListTable() {
-  const [data, setData] = useState<CategoryWithId[]>([]);
+  const [data, setData] = useState<ICategory[]>([]);
   const { getCategories } = useListUser();
 
   useEffect(() => {
