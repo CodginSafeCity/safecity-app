@@ -40,7 +40,7 @@ const RegisterPage = () => {
                 onClick={onSwitchToLogin}
                 asChild
               >
-                <Link href="/login" className="hover:text-primary">
+                <Link href="/" className="hover:text-primary">
                   Iniciar sesión
                 </Link>
               </Button>

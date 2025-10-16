@@ -50,9 +50,6 @@ export default function asyncDashboardLayout({
     redirect("/");
   }
 
-  console.log("User Auth:", userAuth);
-  console.log("User Data:", user);
-
   if (user && user.role?.name === "Admin") {
     return (
       <SidebarProvider>
@@ -84,7 +81,7 @@ export default function asyncDashboardLayout({
     );
   }
 
-  if (user && user.role?.name !== "Admin") {
+  if (user && user.role?.name === "User") {
     return <UserDashboard user={user} mutate={mutate} />;
   }
 }

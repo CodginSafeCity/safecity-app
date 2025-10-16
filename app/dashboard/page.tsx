@@ -1,6 +1,5 @@
 "use client";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 export default function DashboardHomePage() {
   // Redirect dashboard overview page

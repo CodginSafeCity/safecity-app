@@ -4,6 +4,7 @@ import { RegisterUserControlEntityFormData } from "../../types/validation";
 import { CreateZoneFormData } from "../types/validation";
 import { IAvailabilityZone } from "../types/availability-zone";
 import { IIncident } from "../../../tickets/types/ticket";
+import { IOvreView } from "../types/overview";
 
 export const deleteControlEntityService = async (
   controlEntityId: string
@@ -76,6 +77,15 @@ export const getIncidentsControlEntitiesService = async (
 ): Promise<ApiResponse<IIncident[]>> => {
   return httpRequest({
     url: `/control-entities/${controlEntityId}/incidents`,
+    method: "GET",
+  });
+};
+
+export const getOverviewControlEntitiesService = async (
+  controlEntityId: string
+): Promise<ApiResponse<IOvreView[]>> => {
+  return httpRequest({
+    url: `/control-entities/${controlEntityId}/groupByStatus`,
     method: "GET",
   });
 };

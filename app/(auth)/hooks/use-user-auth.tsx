@@ -9,7 +9,7 @@ export default function useUserAuth() {
   const fetcher = async (): Promise<AuthProfileType> => {
     try {
       const response = await getUserAuthService();
-      console.log("User profile fetched:", response);
+
       return response;
     } catch (error) {
       throw error;

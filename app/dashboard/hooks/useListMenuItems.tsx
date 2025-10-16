@@ -4,7 +4,7 @@ import { getMenuItems } from "../services/menu-service";
 const useListMenuItems = () => {
   const showMenuItems = () => {
     const data = getMenuItems();
-    console.log("Menu Items:", data);
+    // console.log("Menu Items:", data);
 
     return data;
   };

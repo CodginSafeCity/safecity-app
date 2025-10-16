@@ -1,6 +1,7 @@
 "use client";
 
 import ListControlCentersTable from "./components/(table-list)/list-control-centers-table";
+import CreateControlEntityModal from "./components/create-control-entity-modal";
 
 export default function ControlCenterPage() {
   return (
@@ -12,7 +13,9 @@ export default function ControlCenterPage() {
             Esta es la página de gestión de los centros de control.
           </span>
         </div>
-        <div>{/* <CreateUserModal /> */}</div>
+        <div>
+          <CreateControlEntityModal />
+        </div>
       </div>
       <div>
         <ListControlCentersTable />
