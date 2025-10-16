@@ -1,19 +1,23 @@
-export interface TicketType {
+import { ICity } from "@/types/city";
+import { ICategory } from "../../categories/types/category";
+import { IUser } from "../../users/types/user";
+
+export interface IIncident {
+  id: string;
   userId: string;
   title: string;
   description: string;
   categoryId: string;
-  status: "open" | "in_progress" | "resolved" | "closed";
+  status: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
   cityId?: string;
   location: TicketLocationInterface;
-  reportedAt: Date;
-  verifiedAt?: Date | null;
-  createdAt: Date;
-  updatedAt?: Date;
-}
-
-export interface TicketWithId extends TicketType {
-  id: string;
+  reported_at: Date;
+  verified_at?: Date | null;
+  created_at: Date;
+  updated_at?: Date;
+  category?: ICategory;
+  city?: ICity;
+  user?: IUser;
 }
 
 export interface TicketLocationInterface {

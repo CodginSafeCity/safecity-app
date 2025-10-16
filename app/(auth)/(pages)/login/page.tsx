@@ -3,22 +3,8 @@ import { GalleryVerticalEnd } from "lucide-react";
 import LoginForm from "../../components/LoginForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useAuthStore } from "@/store/auth-store";
-import { useEffect } from "react";
 
 export default function LoginPage() {
-  const { token } = useAuthStore();
-
-  const onSwitchToRegister = () => {
-    // Logic to switch to the register page
-  };
-
-  useEffect(() => {
-    if (token) {
-      window.location.href = "/dashboard";
-    }
-  }, [token]);
-
   return (
     <div className="grid min-h-svh lg:grid-cols-1">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -44,13 +30,7 @@ export default function LoginPage() {
               <p className="px-8 text-center text-sm text-muted-foreground">
                 ¿No tienes una cuenta?{" "}
               </p>
-              <Button
-                variant="outline"
-                size={"lg"}
-                className="w-full"
-                onClick={onSwitchToRegister}
-                asChild
-              >
+              <Button variant="outline" size={"lg"} className="w-full" asChild>
                 <Link href="/register" className="hover:text-primary">
                   Regístrate
                 </Link>

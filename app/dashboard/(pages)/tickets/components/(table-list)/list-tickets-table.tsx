@@ -1,6 +1,6 @@
 import { DataTable } from "@/components/ui/data-table";
 import { useEffect, useState } from "react";
-import { TicketWithId } from "../../types/ticket";
+import { IIncident } from "../../types/ticket";
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import useListTickets from "../../hooks/use-list-tickets";
 import { columns } from "./columns";
 
 export default function TicketListTable() {
-  const [data, setData] = useState<TicketWithId[]>([]);
+  const [data, setData] = useState<IIncident[]>([]);
   const { getTickets } = useListTickets();
 
   useEffect(() => {

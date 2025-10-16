@@ -23,7 +23,7 @@ export type FormResetPasswordData = {
 export type ResetPasswordData = {
   email: string;
   token: string;
-  password: string;
+  newPassword: string;
   password_confirmation: string;
 };
 
@@ -31,10 +31,10 @@ export type AuthResponse = {
   token: string;
 };
 
-export type UserProfile = {
+export type AuthProfileType = {
   id: string;
   name: string;
-  lastName: string;
+  lastName?: string;
   email: string;
   avatarUrl?: string;
 };

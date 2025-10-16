@@ -10,16 +10,10 @@ import { useAuthStore } from "@/store/auth-store";
 
 const LoginForm = () => {
   const { formLogin, login, isLoading } = useLogin();
-  const { setToken } = useAuthStore();
 
   const onSubmit = async (values: FormLoginData) => {
     try {
-      const data = await login(values);
-      setToken(data.attributes.access_token);
-
-      document.cookie = `token=${data.attributes.access_token}; path=/; max-age=86400`; // 1 day
-
-      window.location.href = "/dashboard";
+      await login(values);
     } catch (error) {
       console.log(error);
     }

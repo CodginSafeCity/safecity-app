@@ -1,14 +1,14 @@
 import { useForm } from "react-hook-form";
-import z from "zod";
+import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../types/validations";
 import { registerService } from "../services/auth-service";
 import { useState } from "react";
-import { handleErrorForm } from "@/lib/handle-error";
 import { AxiosError } from "axios";
 
 const useRegister = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);
 
   const formRegister = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -18,6 +18,7 @@ const useRegister = () => {
       email: "",
       password: "",
       password_confirmation: "",
+      roleId: process.env.NEXT_PUBLIC_ROLE_USER_ID || "",
     },
   });
   const register = async (
@@ -26,31 +27,22 @@ const useRegister = () => {
     setIsLoading(true);
     try {
       const response = await registerService(data);
+      setIsRegistered(true);
       return response;
     } catch (error) {
-      // handleErrorForm(formRegister, error);
-
       if (error instanceof AxiosError) {
-        if (error.status === 422) {
-          const actionErrors = error.response?.data.errors;
-
-          Object.keys(actionErrors).forEach((field) => {
-            formRegister.setError(field as any, {
-              type: "server",
-              message: actionErrors[field],
-            });
-          });
-        }
+        formRegister.setError("email", {
+          type: "server",
+          message: error.response?.data.message || "Server error",
+        });
       }
-
-      console.log(formRegister.formState.errors);
       throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { register, formRegister, isLoading };
+  return { register, formRegister, isLoading, isRegistered };
 };
 
 export default useRegister;

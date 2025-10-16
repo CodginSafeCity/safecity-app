@@ -1,19 +1,36 @@
-import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updatePasswordUserSchema } from "../types/validation";
+import {
+  updatePasswordUserSchema,
+  UpdatePasswordUserType,
+} from "../types/validation";
+import { useState } from "react";
+import { updatePasswordUserService } from "../services/user-service";
 
 const useUpdatePasswordUser = () => {
-  const formUpdate = useForm<z.infer<typeof updatePasswordUserSchema>>({
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const formUpdate = useForm<UpdatePasswordUserType>({
     resolver: zodResolver(updatePasswordUserSchema),
     defaultValues: {
       password: "",
       confirmPassword: "",
     },
   });
-  const update = (data: z.infer<typeof updatePasswordUserSchema>) => {};
+  const updatePassword = async (id: string, data: UpdatePasswordUserType) => {
+    setIsLoading(true);
+    try {
+      const response = await updatePasswordUserService(id, data);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating password:", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  return { update, formUpdate };
+  return { updatePassword, formUpdate, isLoading };
 };
 
 export default useUpdatePasswordUser;

@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { Dialog } from "@radix-ui/react-dialog";
 import { Trash } from "lucide-react";
-import { TicketWithId } from "../types/ticket";
+import { IIncident } from "../types/ticket";
 
 interface TicketDeleteModalProps {
   // You can add props here if needed, e.g., ticket details
-  ticket: TicketWithId;
+  ticket: IIncident;
 }
 export default function TicketDeleteModal({ ticket }: TicketDeleteModalProps) {
   return (

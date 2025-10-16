@@ -1,6 +1,5 @@
 import useLogout from "@/app/(auth)/hooks/use-logout";
 import useUserAuth from "@/app/(auth)/hooks/use-user-auth";
-import { UserProfile } from "@/app/(auth)/types/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -25,27 +24,21 @@ type NavUserProps = {
 };
 
 export default function NavUser({}: NavUserProps) {
-  const [userAuth, setUserAuth] = useState<UserProfile | null>(null);
-
   const { isMobile } = useSidebar();
 
-  const { getUserProfile } = useUserAuth();
+  const { userAuth, mutate } = useUserAuth();
   const { clearAuthState } = useAuthStore();
   const { logout } = useLogout();
 
   const onLogout = async () => {
-    // console.log("Logging out...");
-    await logout();
-
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-    clearAuthState();
-    window.location.href = "/";
+    try {
+      await logout();
+      clearAuthState();
+      mutate();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
-  useEffect(() => {
-    const profile = getUserProfile();
-    setUserAuth(profile);
-  }, []);
 
   return (
     <SidebarMenu>

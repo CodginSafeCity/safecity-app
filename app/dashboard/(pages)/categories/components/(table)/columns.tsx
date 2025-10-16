@@ -1,8 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { CategoryWithId } from "../../types/category";
+import { ICategory } from "../../types/category";
 import { CategoryActions } from "./actions";
 
-export const columns: ColumnDef<CategoryWithId>[] = [
+export const columns: ColumnDef<ICategory>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -20,7 +20,7 @@ export const columns: ColumnDef<CategoryWithId>[] = [
     accessorKey: "actions",
     cell: ({ row }) => {
       const category = row.original;
-      return <CategoryActions />;
+      return <CategoryActions category={category} />;
     },
   },
 ];

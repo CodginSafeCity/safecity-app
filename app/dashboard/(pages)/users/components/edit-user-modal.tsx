@@ -9,17 +9,22 @@ import {
 import { Pen } from "lucide-react";
 import FormUpdateUser from "./form-update-user";
 import { useState } from "react";
+import { IUser } from "../types/user";
+import { Button } from "@/components/ui/button";
 
-const EditUserModal = () => {
+interface EditUserModalProps {
+  user: IUser;
+}
+const EditUserModal = ({ user }: EditUserModalProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <div className="flex px-1 py-1 items-center hover:bg-gray-100 rounded-md cursor-pointer w-full">
-          <Pen className="size-4 mr-2" />
-          <span>Editar</span>
-        </div>
+      <DialogTrigger asChild title="Editar usuario">
+        <Button variant={"outline"} className="p-0 cursor-pointer">
+          <Pen className="size-4" />
+          {/* <span>Editar</span> */}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -28,11 +33,14 @@ const EditUserModal = () => {
         </DialogHeader>
         <div>
           <FormUpdateUser
+            user={user}
             onCancel={(result) => {
               setIsOpen(false);
             }}
             onUpdate={(result) => {
-              console.log("Update:", result);
+              if (result) {
+                setIsOpen(false);
+              }
             }}
           />
         </div>

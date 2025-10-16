@@ -56,7 +56,7 @@ const ResetPasswordForm = ({ isResetPassword }: ResetPasswordFormProps) => {
           <div className="grid gap-3">
             <FormInputField
               control={formResetPassword.control}
-              name="password"
+              name="newPassword"
               label="Nueva contraseña"
               type="password"
               placeholder="**********"

@@ -9,16 +9,21 @@ import {
 import { Fingerprint, Pen } from "lucide-react";
 import FormUpdatePasswordUser from "./form-update-password-user";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
-const EditPasswordUserModal = () => {
+type EditPasswordUserModalProps = {
+  userId: string;
+};
+
+const EditPasswordUserModal = ({ userId }: EditPasswordUserModalProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <div className="flex px-1 py-1 items-center hover:bg-gray-100 rounded-md cursor-pointer w-full">
-          <Fingerprint className="size-4 mr-2" />
-          <span>Actualizar contraseña</span>
-        </div>
+      <DialogTrigger asChild title="Actualizar contraseña">
+        <Button variant={"outline"} className="p-0 cursor-pointer">
+          <Fingerprint className="size-4" />
+          {/* <span>Actualizar contraseña</span> */}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -27,6 +32,7 @@ const EditPasswordUserModal = () => {
         </DialogHeader>
         <div>
           <FormUpdatePasswordUser
+            userId={userId}
             onCancel={(result) => setIsOpen(!result)}
             onUpdate={({ result }) => {}}
           />

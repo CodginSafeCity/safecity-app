@@ -1,19 +1,25 @@
 import z from "zod";
-import { updateUserSchema } from "../types/validation";
+import { updateUserSchema, UpdateUserType } from "../types/validation";
 import FormInputField from "@/components/ui/form-field";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import useUpdateUser from "../hooks/useUpdateUser";
+import { IUser } from "../types/user";
 
 type FormUpdateUserProps = {
+  user: IUser;
   onCancel: (result: boolean) => void;
   onUpdate: ({ result }: { result: boolean }) => void;
 };
-const FormUpdateUser = ({ onCancel, onUpdate }: FormUpdateUserProps) => {
-  const { formUpdate, update } = useUpdateUser();
+const FormUpdateUser = ({ user, onCancel, onUpdate }: FormUpdateUserProps) => {
+  const { formUpdate, update, isLoading } = useUpdateUser({
+    defaultValues: user,
+  });
 
-  const onSubmit = (values: z.infer<typeof updateUserSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: UpdateUserType) => {
+    await update(user.id, values);
+
+    window.location.reload();
     onUpdate({ result: true });
   };
 
@@ -32,16 +38,14 @@ const FormUpdateUser = ({ onCancel, onUpdate }: FormUpdateUserProps) => {
                 name="name"
                 label="Nombres"
                 type="text"
-                placeholder="Jhon Doe"
               />
             </div>
             <div className="flex-1">
               <FormInputField
                 control={formUpdate.control}
-                name="lastName"
+                name="last_name"
                 label="Apellidos"
                 type="text"
-                placeholder="Smith Williams"
               />
             </div>
           </div>
@@ -51,20 +55,6 @@ const FormUpdateUser = ({ onCancel, onUpdate }: FormUpdateUserProps) => {
               name="email"
               label="Correo electrónico"
               type="email"
-              placeholder="tucorreo@ejemplo.com"
-            />
-          </div>
-          <div className="grid gap-3">
-            <FormInputField
-              control={formUpdate.control}
-              name="role_id"
-              label="Rol"
-              type="select"
-              placeholder="Selecciona un rol"
-              options={[
-                { label: "reportador", value: "reporter" },
-                { label: "verificador", value: "verifier" },
-              ]}
             />
           </div>
           <div className="flex gap-3 justify-end">
@@ -76,8 +66,13 @@ const FormUpdateUser = ({ onCancel, onUpdate }: FormUpdateUserProps) => {
             >
               Cancelar
             </Button>
-            <Button size={"lg"} type="submit" className="cursor-pointer">
-              Actualizar
+            <Button
+              size={"lg"}
+              type="submit"
+              className="cursor-pointer"
+              disabled={isLoading}
+            >
+              {isLoading ? "Actualizando..." : "Actualizar"}
             </Button>
           </div>
         </div>

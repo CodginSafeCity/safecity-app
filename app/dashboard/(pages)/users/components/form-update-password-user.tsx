@@ -1,22 +1,29 @@
 import z from "zod";
-import { updatePasswordUserSchema } from "../types/validation";
+import {
+  updatePasswordUserSchema,
+  UpdatePasswordUserType,
+} from "../types/validation";
 import FormInputField from "@/components/ui/form-field";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import useUpdatePasswordUser from "../hooks/useUpdatePasswordUser";
 
 type FormUpdatePasswordType = {
+  userId: string;
   onCancel: (result: boolean) => void;
   onUpdate: ({ result }: { result: boolean }) => void;
 };
 const FormUpdatePasswordUser = ({
+  userId,
   onCancel,
   onUpdate,
 }: FormUpdatePasswordType) => {
-  const { formUpdate, update } = useUpdatePasswordUser();
+  const { formUpdate, updatePassword, isLoading } = useUpdatePasswordUser();
 
-  const onSubmit = (values: z.infer<typeof updatePasswordUserSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: UpdatePasswordUserType) => {
+    await updatePassword(userId, values);
+    onUpdate({ result: true });
+    window.location.reload();
   };
 
   const handleCancel = () => {
@@ -59,8 +66,9 @@ const FormUpdatePasswordUser = ({
               className="cursor-pointer"
               variant={"default"}
               type="submit"
+              disabled={isLoading}
             >
-              Actualizar
+              {isLoading ? "Actualizando..." : "Actualizar"}
             </Button>
           </div>
         </div>

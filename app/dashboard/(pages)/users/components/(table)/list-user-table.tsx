@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/ui/data-table";
 import useListUser from "../../hooks/useListUser";
 import { useEffect, useState } from "react";
-import { userListType } from "../../types/user";
+import { IUser } from "../../types/user";
 import { columns } from "./columns";
 import {
   Card,
@@ -12,12 +12,14 @@ import {
 } from "@/components/ui/card";
 
 const UserListTable = () => {
-  const [data, setData] = useState<userListType[]>([]);
+  const [data, setData] = useState<IUser[]>([]);
   const { getUsers } = useListUser();
 
   useEffect(() => {
     const fetchData = async () => {
       const users = await getUsers();
+
+      console.log(users);
       setData(users);
     };
     fetchData();

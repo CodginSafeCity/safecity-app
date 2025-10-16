@@ -1,8 +1,5 @@
-export interface Category {
+export interface ICategory {
+  id: string;
   name: string;
   description: string;
-}
-
-export interface CategoryWithId extends Category {
-  id: number;
 }

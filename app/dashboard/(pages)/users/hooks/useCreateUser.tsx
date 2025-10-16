@@ -12,7 +12,7 @@ const useCreateUser = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      role_id: 0,
+      role_id: "",
     },
   });
   const register = (data: z.infer<typeof createsUserSchema>) => {};

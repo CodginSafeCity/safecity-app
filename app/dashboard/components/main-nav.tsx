@@ -20,7 +20,9 @@ export function NavMain({ items }: NavMainProps) {
     <SidebarGroup>
       <SidebarMenu>
         {items?.map((item: MenuItem, index) => {
-          const isActive = pathName === item.url;
+          // Check if the current path matches the item's URL Or if the current path starts with the item's URL (for nested routes)
+          const isActive =
+            pathName === item.url || pathName.startsWith(`${item.url}/`);
 
           return (
             <SidebarMenuItem key={item.title}>

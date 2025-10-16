@@ -1,12 +1,15 @@
 import { Form, FormLabel } from "@/components/ui/form";
 import useCreateTicket from "../hooks/use-create-ticket";
-import useCreateUser from "../../users/hooks/useCreateUser";
-import { createTicketSchema } from "../types/validation";
-import z from "zod";
+import { CreateTicketFormData } from "../types/validation";
 import { Button } from "@/components/ui/button";
 import FormInputField from "@/components/ui/form-field";
 import useListCategories from "../../categories/hooks/use-list-categories";
 import TicketLocation from "./ticket-location";
+import { ICategory } from "../../categories/types/category";
+import { useEffect, useState } from "react";
+import { TicketLocationInterface } from "../types/ticket";
+import useListCity from "@/hooks/use-list-city";
+import { ICity } from "@/types/city";
 
 type FormCreateTicketProps = {
   onCancel: (result: boolean) => void;
@@ -14,12 +17,17 @@ type FormCreateTicketProps = {
 };
 
 const FormCreateTicket = ({ onCancel, onCreate }: FormCreateTicketProps) => {
-  const { formCreate } = useCreateTicket();
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [cities, setCities] = useState<ICity[]>([]);
+
+  const { formCreate, createTicket, isLoading } = useCreateTicket();
   const { getCategories } = useListCategories();
+  const { isLoading: isLoadingCities, listCities } = useListCity();
 
-  const onSubmit = (values: z.infer<typeof createTicketSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: CreateTicketFormData) => {
+    console.log("vamos a enviar", values);
 
+    const response = await createTicket(values);
     onCreate({ result: true });
   };
 
@@ -27,59 +35,64 @@ const FormCreateTicket = ({ onCancel, onCreate }: FormCreateTicketProps) => {
     onCancel(true);
   };
 
+  useEffect(() => {
+    console.log("Date: ", new Date().toISOString());
+    const fetchCategories = async () => {
+      const data = await getCategories();
+      setCategories(data);
+    };
+
+    const fetchCities = async () => {
+      const cities = await listCities();
+      setCities(cities);
+    };
+
+    fetchCategories();
+    fetchCities();
+  }, []);
+
   return (
     <Form {...formCreate}>
       <form onSubmit={formCreate.handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-6">
           <div className="">
-            <FormInputField
+            {/* <FormInputField
               control={formCreate.control}
               name="title"
               label="Título"
               type="text"
               placeholder="Título del incidente"
+            /> */}
+          </div>
+          <div className="">
+            <FormInputField
+              control={formCreate.control}
+              name="categoryId"
+              label="Categoría"
+              type="select"
+              placeholder="Categoría del incidente"
+              options={categories.map((category) => ({
+                label: category.name,
+                value: category.id,
+              }))}
             />
           </div>
-          <div className="flex flex-col md:flex-row gap-3 w-full">
-            <div className="">
-              <FormInputField
-                control={formCreate.control}
-                name="categoryId"
-                label="Categoría"
-                type="select"
-                placeholder="Categoría del incidente"
-                options={[]}
-              />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <FormLabel>Ubicación</FormLabel>
-            <TicketLocation
-              onLocationChange={(location) => console.log(location)}
+          <div className="">
+            <FormInputField
+              control={formCreate.control}
+              name="cityId"
+              label="Ciudad"
+              type="select"
+              placeholder="Ciudad del incidente"
+              options={cities.map((city) => ({
+                label: city.name,
+                value: city.id,
+              }))}
             />
           </div>
-          <div className="flex flex-col md:flex-row gap-3 w-full">
-            <div className="flex-1">
-              <FormInputField
-                control={formCreate.control}
-                name="departmentId"
-                label="Departamento"
-                type="select"
-                placeholder="Departamento del incidente"
-                options={[]}
-              />
-            </div>
-            <div className="flex-1">
-              <FormInputField
-                control={formCreate.control}
-                name="cityId"
-                label="Ciudad"
-                type="select"
-                placeholder="Ciudad del incidente"
-                options={[]}
-              />
-            </div>
-          </div>
+          {/* <div className="flex flex-col md:flex-row gap-3 w-full"> */}
+
+          {/* </div> */}
           <div>
             <FormInputField
               control={formCreate.control}
@@ -87,6 +100,15 @@ const FormCreateTicket = ({ onCancel, onCreate }: FormCreateTicketProps) => {
               label="Descripción"
               type="textarea"
               placeholder="Descripción del incidente"
+            />
+          </div>
+          <div className="space-y-2">
+            <FormLabel>Ubicación</FormLabel>
+            <TicketLocation
+              onLocationChange={(location: TicketLocationInterface) => {
+                console.log("Location changed: ", location);
+                formCreate.setValue("location", location);
+              }}
             />
           </div>
           <div className="flex justify-end gap-3">

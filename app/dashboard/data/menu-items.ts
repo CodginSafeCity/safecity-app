@@ -9,7 +9,7 @@ import {
 export const menuItems = [
   {
     title: "Dashboard",
-    url: "/dashboard",
+    url: "/dashboard/overview",
     icon: LayoutDashboard,
     isActive: true,
     items: [],
@@ -30,7 +30,7 @@ export const menuItems = [
   },
   {
     title: "Centros de control",
-    url: "/dashboard/control-centers",
+    url: "/dashboard/control-entities",
     icon: Building,
     isActive: false,
     items: [],

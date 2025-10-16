@@ -9,13 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Check } from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 import { useState } from "react";
-import { TicketWithId } from "../types/ticket";
+import { IIncident } from "../types/ticket";
 
 interface VerifyTicketModalProps {
   // You can add props here if needed, e.g., ticket details
-  ticket: TicketWithId;
+  ticket: IIncident;
 }
 export default function VerifyTicketModal({ ticket }: VerifyTicketModalProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -23,7 +23,7 @@ export default function VerifyTicketModal({ ticket }: VerifyTicketModalProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <div className="flex px-1 py-1 items-center hover:bg-gray-100 rounded-md cursor-pointer w-full">
-          <Check className="size-4 mr-2" />
+          <BadgeCheck className="size-4 mr-2" />
           <span>Verificar incidente</span>
         </div>
       </DialogTrigger>

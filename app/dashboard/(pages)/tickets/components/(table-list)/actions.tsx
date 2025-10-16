@@ -11,10 +11,11 @@ import {
 import ViewTicketModal from "../view-ticket-modal";
 import TicketDeleteModal from "../delete-ticket-modal";
 import VerifyTicketModal from "../verify-ticket-modal";
-import { TicketWithId } from "../../types/ticket";
+import { IIncident } from "../../types/ticket";
+import CloseTicketModal from "../close-ticket-modal";
 
 interface TicketActionsProps {
-  ticket: TicketWithId;
+  ticket: IIncident;
 }
 
 export default function TicketActions({ ticket }: TicketActionsProps) {
@@ -29,13 +30,24 @@ export default function TicketActions({ ticket }: TicketActionsProps) {
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <ViewTicketModal ticket={ticket} />
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <VerifyTicketModal ticket={ticket} />
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <TicketDeleteModal ticket={ticket} />
-        </DropdownMenuItem>
+        {ticket.status === "OPEN" && (
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <VerifyTicketModal ticket={ticket} />
+          </DropdownMenuItem>
+        )}
+        {ticket.status === "IN_PROGRESS" && (
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <CloseTicketModal ticket={ticket} />
+          </DropdownMenuItem>
+        )}
+        {ticket.status === "OPEN" && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <TicketDeleteModal ticket={ticket} />
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
