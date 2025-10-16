@@ -84,7 +84,7 @@ export default function asyncDashboardLayout({
     );
   }
 
-  if (user && user.role?.name !== "User") {
+  if (user && user.role?.name !== "Admin") {
     return <UserDashboard user={user} mutate={mutate} />;
   }
 }
